@@ -6,8 +6,9 @@ import { useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { Lightbulb, Target, BookOpen, CheckCircle2, Download, Loader2 } from "lucide-react"
+import { Lightbulb, Target, BookOpen, CheckCircle2, Download, Loader2 } from 'lucide-react'
 import ResumeAnalysis from "@/components/resume-analysis"
+import ExampleResume from "@/components/example-resume"
 import { analyzeResume } from "@/lib/resume-analyzer"
 
 interface Problem {
@@ -344,6 +345,15 @@ ${analysis.actions.map((a, i) => `${i + 1}. ${a.title}: ${a.description}`).join(
 
       {resumeAnalysis && (
         <ResumeAnalysis analysis={resumeAnalysis} jobTitle={analysis.jobTitle} company={analysis.company} />
+      )}
+      {resumeAnalysis && (
+        <ExampleResume
+          jobTitle={analysis.jobTitle}
+          company={analysis.company}
+          keywords={[...resumeAnalysis.keywordMatches.matched, ...resumeAnalysis.keywordMatches.missing]}
+          problems={analysis.problems}
+          resumeText={resumeText}
+        />
       )}
     </div>
   )
