@@ -29,7 +29,7 @@ Don't just analyze job descriptions, **transform** them into actionable insights
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/career-path-compass.git
+git clone https://github.com/daaimah123/career-path-compass.git
 
 # Navigate to the project directory
 cd career-path-compass
