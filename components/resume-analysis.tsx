@@ -2,7 +2,7 @@
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { CheckCircle2, AlertCircle, ArrowUpRight, FileText, Edit3, Zap } from 'lucide-react'
+import { CheckCircle2, AlertCircle, ArrowUpRight, FileText, Edit3, Zap, Target } from "lucide-react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
 interface ResumeAnalysisProps {
@@ -18,9 +18,10 @@ interface ResumeAnalysisProps {
   }
   jobTitle: string
   company: string
+  jobActions?: Array<{ title: string; description: string }> // Add this line
 }
 
-export default function ResumeAnalysis({ analysis, jobTitle, company }: ResumeAnalysisProps) {
+export default function ResumeAnalysis({ analysis, jobTitle, company, jobActions = [] }: ResumeAnalysisProps) {
   // Generate specific suggestions based on the analysis
   const generateSpecificSuggestions = () => {
     const suggestions = []
@@ -28,9 +29,9 @@ export default function ResumeAnalysis({ analysis, jobTitle, company }: ResumeAn
     // Suggestion for professional summary
     suggestions.push({
       title: "Tailor your professional summary",
-      description: `Create a targeted summary that specifically mentions your experience with ${
-        analysis.keywordMatches.matched.slice(0, 3).join(", ")
-      } and how you've addressed challenges similar to what ${company} is facing.`
+      description: `Create a targeted summary that specifically mentions your experience with ${analysis.keywordMatches.matched
+        .slice(0, 3)
+        .join(", ")} and how you've addressed challenges similar to what ${company} is facing.`,
     })
 
     // Suggestion for missing keywords
@@ -39,32 +40,32 @@ export default function ResumeAnalysis({ analysis, jobTitle, company }: ResumeAn
         title: "Incorporate missing keywords",
         description: `Add the following keywords to your resume in context of your actual experience: ${analysis.keywordMatches.missing
           .slice(0, 5)
-          .join(", ")}.`
+          .join(", ")}.`,
       })
     }
 
     // Suggestion for quantifying achievements
     suggestions.push({
       title: "Quantify your achievements",
-      description: `Add specific metrics to your accomplishments, such as "Increased performance by X%", "Reduced costs by $Y", or "Improved efficiency by Z hours per week".`
+      description: `Add specific metrics to your accomplishments, such as "Increased performance by X%", "Reduced costs by $Y", or "Improved efficiency by Z hours per week".`,
     })
 
     // Suggestion for skills section
     suggestions.push({
       title: "Reorganize your skills section",
-      description: `Create a dedicated skills section that groups your abilities into categories like "Technical Skills", "Tools & Platforms", and "Soft Skills" to make them more scannable for ATS.`
+      description: `Create a dedicated skills section that groups your abilities into categories like "Technical Skills", "Tools & Platforms", and "Soft Skills" to make them more scannable for ATS.`,
     })
 
     // Suggestion for job title alignment
     suggestions.push({
       title: "Align your job titles",
-      description: `Consider adjusting your previous job titles to better align with "${jobTitle}" where truthful and appropriate to improve keyword matching.`
+      description: `Consider adjusting your previous job titles to better align with "${jobTitle}" where truthful and appropriate to improve keyword matching.`,
     })
 
     // Suggestion for bullet point format
     suggestions.push({
       title: "Reformat your bullet points",
-      description: `Structure your bullet points using the "Accomplished [X] as measured by [Y] by doing [Z]" format to clearly communicate your impact.`
+      description: `Structure your bullet points using the "Accomplished [X] as measured by [Y] by doing [Z]" format to clearly communicate your impact.`,
     })
 
     return suggestions
@@ -170,23 +171,63 @@ export default function ResumeAnalysis({ analysis, jobTitle, company }: ResumeAn
               </div>
               <h4 className="text-lg font-bold text-amber-900 font-serif">Specific Improvement Suggestions</h4>
             </div>
-            
+
             <Accordion type="single" collapsible className="bg-amber-50 rounded-lg border border-amber-200">
               {specificSuggestions.map((suggestion, index) => (
-                <AccordionItem key={index} value={`suggestion-${index}`} className="border-b border-amber-200 last:border-0">
+                <AccordionItem
+                  key={index}
+                  value={`suggestion-${index}`}
+                  className="border-b border-amber-200 last:border-0"
+                >
                   <AccordionTrigger className="px-4 py-3 hover:bg-amber-100 text-amber-900 font-medium">
                     <div className="flex items-center">
                       <Zap className="mr-2 h-4 w-4 text-amber-700" />
                       {suggestion.title}
                     </div>
                   </AccordionTrigger>
-                  <AccordionContent className="px-4 py-3 text-amber-800">
-                    {suggestion.description}
-                  </AccordionContent>
+                  <AccordionContent className="px-4 py-3 text-amber-800">{suggestion.description}</AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>
           </div>
+
+          {jobActions && jobActions.length > 0 && (
+            <div className="mb-8">
+              <div className="flex items-center mb-4">
+                <div className="bg-teal-700 p-2 rounded-full text-white mr-3">
+                  <Target size={20} />
+                </div>
+                <h4 className="text-lg font-bold text-teal-900 font-serif">Job-Specific Action Items</h4>
+              </div>
+
+              <Accordion type="single" collapsible className="bg-teal-50 rounded-lg border border-teal-200">
+                {jobActions.map((action, index) => (
+                  <AccordionItem
+                    key={index}
+                    value={`action-${index}`}
+                    className="border-b border-teal-200 last:border-0"
+                  >
+                    <AccordionTrigger className="px-4 py-3 hover:bg-teal-100 text-teal-900 font-medium">
+                      <div className="flex items-center">
+                        <CheckCircle2 className="mr-2 h-4 w-4 text-teal-700" />
+                        {action.title}
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="px-4 py-3 text-teal-800">
+                      <p>{action.description}</p>
+                      <div className="mt-3 p-3 bg-white rounded border border-teal-300">
+                        <p className="font-medium text-teal-900">Resume Tip:</p>
+                        <p className="text-teal-800">
+                          Include specific examples from your experience that demonstrate how you've{" "}
+                          {action.title.toLowerCase()} or similar achievements in your past roles.
+                        </p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+          )}
 
           <div>
             <div className="flex items-center mb-4">

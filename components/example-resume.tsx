@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Download, FileText } from "lucide-react"
 import { useState } from "react"
+import React from "react"
 
 interface ExampleResumeProps {
   jobTitle: string
@@ -15,6 +16,11 @@ interface ExampleResumeProps {
 
 export default function ExampleResume({ jobTitle, company, keywords, problems, resumeText = "" }: ExampleResumeProps) {
   const [isExpanded, setIsExpanded] = useState(false)
+
+  // Reset expanded state when resumeText changes
+  React.useEffect(() => {
+    setIsExpanded(false)
+  }, [resumeText])
 
   // Extract information from the original resume if available
   const extractResumeInfo = () => {

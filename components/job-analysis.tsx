@@ -6,7 +6,7 @@ import { useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { Lightbulb, Target, BookOpen, CheckCircle2, Download, Loader2 } from 'lucide-react'
+import { Lightbulb, Target, BookOpen, CheckCircle2, Download, Loader2 } from "lucide-react"
 import ResumeAnalysis from "@/components/resume-analysis"
 import ExampleResume from "@/components/example-resume"
 import { analyzeResume } from "@/lib/resume-analyzer"
@@ -98,6 +98,9 @@ ${analysis.actions.map((a, i) => `${i + 1}. ${a.title}: ${a.description}`).join(
     }
 
     setIsAnalyzing(true)
+    // Reset previous analysis to ensure we're starting fresh
+    setResumeAnalysis(null)
+    setResumeText("")
 
     try {
       // Read the file content
@@ -273,7 +276,7 @@ ${analysis.actions.map((a, i) => `${i + 1}. ${a.title}: ${a.description}`).join(
                         ></path>
                       </svg>
                       <p className="mb-2 text-sm text-amber-700">
-                        <span className="font-semibold">Click to upload</span> or drag and drop
+                        <span className="font-semibold">Click to upload</span> your resume
                       </p>
                       <p className="text-xs text-amber-700">PDF, DOCX or TXT (MAX. 5MB)</p>
                     </>
@@ -344,7 +347,12 @@ ${analysis.actions.map((a, i) => `${i + 1}. ${a.title}: ${a.description}`).join(
       </div>
 
       {resumeAnalysis && (
-        <ResumeAnalysis analysis={resumeAnalysis} jobTitle={analysis.jobTitle} company={analysis.company} />
+        <ResumeAnalysis
+          analysis={resumeAnalysis}
+          jobTitle={analysis.jobTitle}
+          company={analysis.company}
+          jobActions={analysis.actions}
+        />
       )}
       {resumeAnalysis && (
         <ExampleResume
